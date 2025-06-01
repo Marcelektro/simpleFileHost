@@ -1,0 +1,170 @@
+@appUrl = http://localhost:8080
+
+###
+POST {{appUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+###
+
+
+POST {{appUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{badPassword}}"
+}
+
+###
+
+
+GET {{appUrl}}/api/auth/asdasd
+Authorization: {{invalid_auth_token}}
+
+###
+
+@testToken = {{valid_auth_token}}
+
+
+POST {{appUrl}}/api/files/upload
+Authorization: {{testToken}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.txt"
+
+< ../simpleFileHost.iml
+--boundary
+
+###
+
+
+GET {{appUrl}}/api/files?sort=DATE_DESC
+Authorization: {{testToken}}
+
+###
+
+GET {{appUrl}}/api/files/{{some_file_id}}
+Authorization: {{testToken}}
+
+###
+
+
+DELETE {{appUrl}}/api/files/{{some_file_id}}
+Authorization: {{testToken}}
+
+###
+
+
+
+POST {{appUrl}}/api/sharing
+Authorization: {{testToken}}
+Content-Type: application/json
+
+{
+  "fileId": "{{some_file_id}}",
+  "password": null,
+  "expiry": null
+}
+
+###
+
+POST {{appUrl}}/api/sharing
+Authorization: {{testToken}}
+Content-Type: application/json
+
+{
+  "fileId": "{{some_file_id}}",
+  "password": "{{some_file_password}}",
+  "expiry": null
+}
+
+###
+
+@testShareId = {{some_share_link_id}}
+@testPassword = {{some_file_password}}
+
+GET {{appUrl}}/api/sharing/{{testShareId}}?password={{testPassword}}
+
+###
+
+
+GET {{appUrl}}/api/sharing/{{testShareId}}
+
+###
+
+
+PUT {{appUrl}}/api/sharing/{{testShareId}}
+Authorization: {{testToken}}
+Content-Type: application/json
+
+{
+  "password": "{{testPassword}}",
+  "expiry": null
+}
+
+###
+
+PUT {{appUrl}}/api/sharing/{{testShareId}}
+Authorization: {{testToken}}
+Content-Type: application/json
+
+{
+  "password": null,
+  "expiry": "{{some_share_link_expiry}}"
+}
+
+###
+
+
+PUT {{appUrl}}/api/sharing/{{testShareId}}
+Authorization: {{testToken}}
+Content-Type: application/json
+
+{
+  "password": null,
+  "expiry": null
+}
+
+###
+
+
+DELETE {{appUrl}}/api/sharing/{{testShareId}}
+Authorization: {{testToken}}
+
+###
+
+
+GET {{appUrl}}/api/sharing/{{testShareId}}/validate
+
+###
+
+GET {{appUrl}}/api/sharing/{{testShareId}}/validate?password={{testPassword}}
+
+###
+
+
+GET {{appUrl}}/api/auth/me
+
+###
+
+
+GET {{appUrl}}/api/auth/me
+Authorization: {{testToken}}
+
+###
+
+
+OPTIONS http://localhost:8080/api/auth/login
+
+###
+
+GET {{appUrl}}/api/files/{{some_file_id}}/shareLinks
+Authorization: {{testToken}}
+
+###
